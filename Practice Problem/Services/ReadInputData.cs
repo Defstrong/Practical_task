@@ -30,8 +30,8 @@ namespace Practice_Problem.Services
             "Region : ".ConsoleWriteDataPerson();
             personInputData.Region = Console.ReadLine();
 
-            string FloorPerson = ReadStr(); ;
             "Floor : ".ConsoleWriteDataPerson();
+            string FloorPerson = ReadStr(); ;
             personInputData.Floor = string.
                 IsNullOrEmpty(FloorPerson) 
                 ? null : (FloorPerson == "Male" 
