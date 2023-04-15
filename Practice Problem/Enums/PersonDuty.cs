@@ -1,7 +1,7 @@
 ﻿
 namespace Practice_Problem.Enums
 {
-    public enum EmploeeDuty
+    public enum PersonDuty
     {
         Administrator,
         Accountant,

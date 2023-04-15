@@ -12,7 +12,7 @@ namespace Practice_Problem.Models
         {
             FirstName = personData.FirstName;
             LastName = personData.LastName;
-            Age = DeterminationOfAge.AgeDetermination(DateOfBirth);
+            Age = DeterminationOfAge.AgeDetermination(personData.DateOfBirth);
             Address = personData.Address;
             City = personData.City;
             Region = personData.Region;

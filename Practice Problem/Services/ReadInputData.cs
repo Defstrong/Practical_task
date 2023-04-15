@@ -8,29 +8,39 @@ namespace Practice_Problem.Services
         {
             "First Name : ".ConsoleWriteDataPerson();
             personInputData.FirstName = Console.ReadLine();
+
             "Last Name : ".ConsoleWriteDataPerson();
             personInputData.LastName = Console.ReadLine();
+
             "Date of birth : ".ConsoleWriteDataPerson();
-            personInputData.DateOfBirth = DateTime.Parse(Console.ReadLine());
+            string dateOfBirthStr = Console.ReadLine();
+            personInputData.DateOfBirth = string.
+                IsNullOrEmpty(dateOfBirthStr) 
+                ? default : DateTime.Parse(dateOfBirthStr);
+
             "Address : ".ConsoleWriteDataPerson();
             personInputData.Address = Console.ReadLine();
+
             "AboutPerson : ".ConsoleWriteDataPerson();
             personInputData.AboutPerson = Console.ReadLine();
+
             "City : ".ConsoleWriteDataPerson();
             personInputData.City = Console.ReadLine();
+
             "Region : ".ConsoleWriteDataPerson();
             personInputData.Region = Console.ReadLine();
-            string FloorPerson = string.Empty;
-            ReadStr(ref FloorPerson);
-            personInputData.Floor = FloorPerson == "Male" ? PersonFloor.Male : PersonFloor.Female;
-        }
-        public static void ReadPersonDataForEdit(this PersonData personInputDataForEdit)
-        {
 
+            string FloorPerson = ReadStr(); ;
+            "Floor : ".ConsoleWriteDataPerson();
+            personInputData.Floor = string.
+                IsNullOrEmpty(FloorPerson) 
+                ? null : (FloorPerson == "Male" 
+                ? PersonFloor.Male : PersonFloor.Female);
         }
-        public static void ReadStr(ref string str)
+        public static string ReadStr()
         {
-            str = Console.ReadLine();
+            return Console.ReadLine();
+
         }
     }
 }

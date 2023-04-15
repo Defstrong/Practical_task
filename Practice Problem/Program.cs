@@ -4,19 +4,19 @@ using Practice_Problem.Enums;
 using Practice_Problem.Services;
 using Practice_Problem.PersonServices;
 
-var _emploees = new List<Person>();
+var _persons = new List<Person>();
 var _inputData = new PersonData();
-var _addAndDeletePerson = new AddDeleteAndEditPersons(_emploees);
+var _addDeleteAndEditPerson = new AddDeleteAndEditPersons(_persons);
 int _countWhile = 100;
 string _inputCommand = string.Empty;
-var _search = new Search(_emploees);
-string _allCommand = "Add Emploee\tDelete Emploee\tEdit Emploee\tEmploees Info\tSearch Emploees\n";
+var _search = new Search(_persons);
+string _allCommand = "Add Person\tDelete Person\tEdit Person\tPersons Info\tSearch Persons\tExport Datas";
 var _person1 = new Person(new PersonData
 {
     FirstName = "Bob",
     LastName = "Another",
     DateOfBirth = new DateTime(2004, 12, 04),
-    Duty = EmploeeDuty.Accountant,
+    Duty = PersonDuty.Accountant,
     Address = "Sino",
     City = "Dushanbe",
     Floor = PersonFloor.Male,
@@ -28,8 +28,8 @@ var _person2 = new Person(new PersonData
 {
     FirstName = "Bob",
     LastName = "Another",
-    DateOfBirth = new DateTime(2004, 12, 04),
-    Duty = EmploeeDuty.Accountant,
+    DateOfBirth = new DateTime(2002, 12, 04),
+    Duty = PersonDuty.Accountant,
     Address = "Sino",
     City = "Dushanbe",
     Floor = PersonFloor.Male,
@@ -41,8 +41,8 @@ var _person3 = new Person(new PersonData
 {
     FirstName = "Bob",
     LastName = "another",
-    DateOfBirth = new DateTime(2004, 12, 04),
-    Duty = EmploeeDuty.Accountant,
+    DateOfBirth = DateTime.Parse("01.12.2004"),
+    Duty = PersonDuty.Accountant,
     Address = "Sino",
     City = "Dushanbe",
     Floor = PersonFloor.Male,
@@ -50,52 +50,69 @@ var _person3 = new Person(new PersonData
     Region = "Another"
 });
 
-_emploees.Add(_person1);
-_emploees.Add(_person2);
-_emploees.Add(_person3);
+_persons.Add(_person1);
+_persons.Add(_person2);
+_persons.Add(_person3);
 
 while(--_countWhile > 0)
 {
     _allCommand.ConsoleWriteDataPerson();
-    "Input command: ".ConsoleWriteDataPerson();
-    ReadInputData.ReadStr(ref _inputCommand);
+    "\nInput command: ".ConsoleWriteDataPerson();
+    _inputCommand = ReadInputData.ReadStr();
 
 
-    if (_inputCommand == "Add Emploee")
+    if (_inputCommand == "Add Person")
     {
         _inputData.ReadPersonData();
-        _addAndDeletePerson.AddPerson(_inputData);
+        _addDeleteAndEditPerson.AddPerson(_inputData);
     }
-    if(_inputCommand == "Delete Emploee")
+    if(_inputCommand == "Delete Person")
     {
-        foreach(var ii in _emploees)
+        foreach(var ii in _persons)
             Console.WriteLine($"First Name: {ii.FirstName}, Last Name: {ii.LastName}, Id: {ii.Id}");
 
         Guid idPersonForDelete = Guid.Parse(Console.ReadLine());
-        _addAndDeletePerson.DeletePerson(idPersonForDelete);
+        _addDeleteAndEditPerson.DeletePerson(idPersonForDelete);
     }
-    if(_inputCommand == "Emploees Info")
+    if(_inputCommand == "Persons Info")
     {
-        foreach (var emploee in _emploees)
+        foreach (var emploee in _persons)
             emploee.ToString().ConsoleWriteDataPerson();
     }
-    if (_inputCommand == "Search Emploees")
+    if (_inputCommand == "Search Persons")
     {
         string inputRequestSearch = String.Empty;
         string inputRequestPropertyForSearch = String.Empty;
-
         $"First name \t Last name \t Duty\n".ConsoleWriteDataPerson();
-
         "Input type search: ".ConsoleWriteDataPerson();
-        ReadInputData.ReadStr(ref inputRequestSearch);
+        inputRequestSearch = ReadInputData.ReadStr();
         "Input property for search: ".ConsoleWriteDataPerson();
-        ReadInputData.ReadStr(ref inputRequestPropertyForSearch);
-
+        inputRequestPropertyForSearch = ReadInputData.ReadStr();
         foreach(var ii in _search.SearchPersons(inputRequestSearch, inputRequestPropertyForSearch))
             Console.WriteLine(ii.ToString());
     }
-    if(_inputCommand == "Edit emploee")
+    if(_inputCommand == "Edit Person")
     {
+        WriteAllPersonData();
+        EditPersonDto dataForEdit = new EditPersonDto();
+        string inputId = string.Empty;
+        "\nEnter ID Person for edit: ".ConsoleWriteDataPerson();
+        inputId = ReadInputData.ReadStr();
+        dataForEdit.Id = Guid.Parse(inputId);
+        dataForEdit.ReadPersonData();
+        _addDeleteAndEditPerson.EditPerson(dataForEdit);
+    }
+    if(_inputCommand == "Export Datas")
+    {
+        string path = string.Empty;
+    }
+}
 
+void WriteAllPersonData()
+{
+    foreach (var person in _persons)
+    {
+        person.Id.ToString().ConsoleWriteDataPerson();
+        person.ToString().ConsoleWriteDataPerson();
     }
 }

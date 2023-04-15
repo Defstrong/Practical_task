@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Practice_Problem.DTO
 {
-    class EditPersonDto:IPersonData
+    class EditPersonDto : PersonData
     {
         public Guid Id { get; set; }
     }
