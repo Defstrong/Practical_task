@@ -104,7 +104,16 @@ while(--_countWhile > 0)
     }
     if(_inputCommand == "Export Datas")
     {
-        string path = string.Empty;
+        "Enter path file: ".ConsoleWriteDataPerson();
+        string path = ReadInputData.ReadStr();
+
+        var exportDatas = new StreamWriter(path, true, System.Text.Encoding.UTF8);
+
+        foreach(var ii in _persons)
+        {
+            exportDatas.WriteLine($"{ii.ToString()} \t");
+        }
+        exportDatas.Close();
     }
 }
 
