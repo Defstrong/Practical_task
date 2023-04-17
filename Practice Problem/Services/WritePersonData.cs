@@ -1,13 +1,21 @@
-﻿using Practice_Problem.Models;
+﻿using Practice_Problem.Abstractions;
+using Practice_Problem.Events;
+using Practice_Problem.Models;
+
 namespace Practice_Problem.Services
 {
-    public static class WritePersonData
+    class WritePersonData : IActinoWithTextDatas
     {
-        public static void ConsoleWriteDataPerson(this string text)
+        public event EventHandler<EventHandlerArgs> Action;
+        public void CompletingAction(string textForWrite)
+        {
+            Action?.Invoke(this, new EventHandlerArgs() { Text = textForWrite });
+        }
+        public void ConsoleWriteDataPerson(string text)
         {
             Console.Write(text);
         }
-        public static void FileWriteDataPerson(this string text, string path)
+        public void FileWriteDataPerson(string text, string path)
         {
             var exportDatas = new StreamWriter(path, true, System.Text.Encoding.UTF8);
 

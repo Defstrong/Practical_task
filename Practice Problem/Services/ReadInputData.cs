@@ -1,46 +1,56 @@
-﻿using Practice_Problem.DTO;
+﻿using Practice_Problem.Abstractions;
+using Practice_Problem.DTO;
 using Practice_Problem.Enums;
+using Practice_Problem.Events;
+
 namespace Practice_Problem.Services
 {
-    public static class ReadInputData
+    class ReadInputData
     {
-        public static void ReadPersonData(this PersonData personInputData)
+        IActinoWithTextDatas writeData = new WritePersonData();
+        public Func<string> ReadStr;
+        public void ReadPersonData(PersonData personInputData)
         {
-            "First Name : ".ConsoleWriteDataPerson();
-            personInputData.FirstName = Console.ReadLine();
+            var ReadLine = ReadLineStr;
+            writeData.Action += ConsoleWrite;
+            writeData.CompletingAction("First Name : ");
+            personInputData.FirstName = ReadLine();
 
-            "Last Name : ".ConsoleWriteDataPerson();
-            personInputData.LastName = Console.ReadLine();
+            writeData.CompletingAction("Last Name : ");
+            personInputData.LastName = ReadLine();
 
-            "Date of birth : ".ConsoleWriteDataPerson();
-            string dateOfBirthStr = Console.ReadLine();
+            writeData.CompletingAction("Date of birth : ");
+            string dateOfBirthStr = ReadLine();
             personInputData.DateOfBirth = string.
-                IsNullOrEmpty(dateOfBirthStr) 
+                IsNullOrEmpty(dateOfBirthStr)
                 ? default : DateTime.Parse(dateOfBirthStr);
 
-            "Address : ".ConsoleWriteDataPerson();
-            personInputData.Address = Console.ReadLine();
+            writeData.CompletingAction("Address : ");
+            personInputData.Address = ReadLine();
 
-            "AboutPerson : ".ConsoleWriteDataPerson();
-            personInputData.AboutPerson = Console.ReadLine();
+            writeData.CompletingAction("AboutPerson : ");
+            personInputData.AboutPerson = ReadLine();
 
-            "City : ".ConsoleWriteDataPerson();
-            personInputData.City = Console.ReadLine();
+            writeData.CompletingAction("City : ");
+            personInputData.City = ReadLine();
 
-            "Region : ".ConsoleWriteDataPerson();
-            personInputData.Region = Console.ReadLine();
+            writeData.CompletingAction("Region : ");
+            personInputData.Region = ReadLine();
 
-            "Floor : ".ConsoleWriteDataPerson();
+            writeData.CompletingAction("Floor : ");
             string FloorPerson = ReadStr(); ;
             personInputData.Floor = string.
-                IsNullOrEmpty(FloorPerson) 
-                ? null : (FloorPerson == "Male" 
+                IsNullOrEmpty(FloorPerson)
+                ? null : (FloorPerson == "Male"
                 ? PersonFloor.Male : PersonFloor.Female);
         }
-        public static string ReadStr()
+        private void ConsoleWrite(object? sender, EventHandlerArgs e)
+        {
+            Console.Write(e.Text);
+        }
+        private string ReadLineStr()
         {
             return Console.ReadLine();
-
         }
     }
 }
