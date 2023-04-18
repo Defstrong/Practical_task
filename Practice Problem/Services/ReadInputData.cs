@@ -2,6 +2,7 @@
 using Practice_Problem.DTO;
 using Practice_Problem.Enums;
 using Practice_Problem.Events;
+using Practice_Problem.InformationResult;
 
 namespace Practice_Problem.Services
 {
@@ -9,48 +10,54 @@ namespace Practice_Problem.Services
     {
         IActinoWithTextDatas writeData = new WritePersonData();
         public Func<string> ReadStr;
-        public void ReadPersonData(PersonData personInputData)
+        public Result<bool> ReadPersonData(PersonData personInputData)
         {
-            var ReadLine = ReadLineStr;
-            writeData.Action += ConsoleWrite;
+            var result = new Result<bool>() { Payload = false };
+            bool error = false;
+            ReadStr = ReadLineStr;
+            writeData.ActionWithText += ConsoleWrite;
             writeData.CompletingAction("First Name : ");
-            personInputData.FirstName = ReadLine();
+            personInputData.FirstName = ReadStr();
 
             writeData.CompletingAction("Last Name : ");
-            personInputData.LastName = ReadLine();
+            personInputData.LastName = ReadStr();
 
             writeData.CompletingAction("Date of birth : ");
-            string dateOfBirthStr = ReadLine();
-            personInputData.DateOfBirth = string.
-                IsNullOrEmpty(dateOfBirthStr)
-                ? default : DateTime.Parse(dateOfBirthStr);
+            string dateOfBirthStr = ReadStr();
+
+            try
+            {
+                personInputData.DateOfBirth = string.
+                    IsNullOrEmpty(dateOfBirthStr)
+                    ? default : DateTime.Parse(dateOfBirthStr);
+            }
+            catch
+            {
+                error = true;
+            }
 
             writeData.CompletingAction("Address : ");
-            personInputData.Address = ReadLine();
+            personInputData.Address = ReadStr();
 
-            writeData.CompletingAction("AboutPerson : ");
-            personInputData.AboutPerson = ReadLine();
+            writeData.CompletingAction("AboutPerson :ы ");
+            personInputData.AboutPerson = ReadStr();
 
             writeData.CompletingAction("City : ");
-            personInputData.City = ReadLine();
+            personInputData.City = ReadStr();
 
             writeData.CompletingAction("Region : ");
-            personInputData.Region = ReadLine();
+            personInputData.Region = ReadStr();
 
             writeData.CompletingAction("Floor : ");
-            string FloorPerson = ReadStr(); ;
+            string FloorPerson = ReadStr();
             personInputData.Floor = string.
                 IsNullOrEmpty(FloorPerson)
                 ? null : (FloorPerson == "Male"
                 ? PersonFloor.Male : PersonFloor.Female);
         }
-        private void ConsoleWrite(object? sender, EventHandlerArgs e)
-        {
+        private void ConsoleWrite(object? sender, EventHandlerArgs e) =>
             Console.Write(e.Text);
-        }
-        private string ReadLineStr()
-        {
-            return Console.ReadLine();
-        }
+        private string ReadLineStr() =>
+            Console.ReadLine();
     }
 }

@@ -7,10 +7,8 @@ namespace Practice_Problem.PersonServices
     sealed class AddDeleteAndEditPersons
     {
         internal readonly List<Person> Persons;
-        public AddDeleteAndEditPersons(List<Person> persons)
-        {
+        public AddDeleteAndEditPersons(List<Person> persons) =>
             Persons = persons;
-        }
 
         public void AddPerson(PersonData personDataForAdd)
         {

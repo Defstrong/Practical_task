@@ -17,11 +17,11 @@ var _filter = new FilterCollection(_persons);
 var _addDeleteAndEditPerson = new AddDeleteAndEditPersons(_persons);
 
 var _writeMassage = new WritePersonData();
-_writeMassage.Action += CompletingAction;
+_writeMassage.ActionWithText += CompletingAction;
 
 var _read = new ReadInputData();
 _read.ReadStr = ReadLineStr;
-var ReadLine = _read.ReadStr;
+var _readLine = _read.ReadStr;
 
 string _allCommand = "Add Person\tDelete Person\tEdit Person\tPersons Info\tSearch Persons\tExport Datas";
 
@@ -70,9 +70,8 @@ _persons.Add(_person3);
 while(_countWhile-- > 0)
 {
     _writeMassage.CompletingAction(_allCommand);
-
     _writeMassage.CompletingAction("\nInput command: ");
-    _inputCommand = ReadLine();
+    _inputCommand = _readLine();
     _writeMassage.CompletingAction($"{AllAction(_inputCommand)}\n");
 }
 
@@ -93,17 +92,19 @@ string AllAction(string inputCommand) =>
 string FilterPersons()
 {
     _writeMassage.CompletingAction("Enter Category for filter: ");
-    string categoryForSort = ReadLine();
+    string categoryForSort = _readLine();
     _writeMassage.CompletingAction("Enter Data for filter: ");
-    string dataForFilter = ReadLine();
-    return _filter.Filtering(categoryForSort, dataForFilter);
+    string dataForFilter = _readLine();
+    var result = _filter.Filtering(categoryForSort, dataForFilter);
+    return result.TextError;
 }
 
 string SortPersons()
 {
     _writeMassage.CompletingAction("Enter Category for sort: ");
-    string categoryForSort = ReadLine();
-    return _sort.Sorting(categoryForSort);
+    string categoryForSort = _readLine();
+    var result = _sort.Sorting(categoryForSort);
+    return result.TextError;
 }
 
 
@@ -148,12 +149,13 @@ string SearchPerson()
     string inputRequestPropertyForSearch = String.Empty;
     _writeMassage.CompletingAction($"First name \t Last name \t Duty\n");
     _writeMassage.CompletingAction("Input type search: ");
-    inputRequestSearch = ReadLine();
+    inputRequestSearch = _readLine();
     _writeMassage.CompletingAction("Input property for search: ");
-    inputRequestPropertyForSearch = ReadLine();
-    foreach (var ii in _search.SearchPersons(inputRequestSearch, inputRequestPropertyForSearch))
+    inputRequestPropertyForSearch = _readLine();
+    var result = _search.SearchPersons(inputRequestSearch, inputRequestPropertyForSearch);
+    foreach (var ii in result.Payload)
         Console.WriteLine(ii.ToString());
-    return "Search Person completed successfuly";
+    return result.TextError;
 }
 
 string EditPerson()
@@ -162,7 +164,7 @@ string EditPerson()
     EditPersonDto dataForEdit = new EditPersonDto();
     string inputId = string.Empty;
     _writeMassage.CompletingAction("\nEnter ID Person for edit: ");
-    inputId = ReadLine();
+    inputId = _readLine();
     dataForEdit.Id = Guid.Parse(inputId);
     _read.ReadPersonData(dataForEdit);
     _addDeleteAndEditPerson.EditPerson(dataForEdit);
@@ -172,17 +174,17 @@ string EditPerson()
 string ExportDatas()
 {
     _writeMassage.CompletingAction("Enter path file: ");
-    string path = ReadLine();
+    string path = _readLine();
+    string datas = string.Empty;
 
     foreach (var ii in _persons)
-        _writeMassage.CompletingAction(ii.ToString());
+        datas += ii.ToString();
 
-    return "Export Datas completed successfuly";
+    var result = _writeMassage.ExportDatasPersons(datas, path);
+    return result.TextError;
 }
 
-void CompletingAction(object? sender, EventHandlerArgs e)
-{
+void CompletingAction(object? sender, EventHandlerArgs e) =>
     Console.Write(e.Text);
-}
 
 string ReadLineStr() => Console.ReadLine();

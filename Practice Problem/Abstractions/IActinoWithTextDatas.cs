@@ -9,7 +9,7 @@ namespace Practice_Problem.Abstractions
 {
     interface IActinoWithTextDatas
     {
-        public event EventHandler<EventHandlerArgs> Action;
+        public event EventHandler<EventHandlerArgs> ActionWithText;
         public void CompletingAction(string textForWrite);
     }
 }

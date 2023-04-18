@@ -20,11 +20,9 @@ namespace Practice_Problem.Models
             Duty = Duty;
             Id = Guid.NewGuid();
         }
-        public override string ToString()
-        {
-            return $"\nFirst Name: {FirstName} \nLast Name: {LastName} \nAge: {Age} " +
+        public override string ToString() =>
+            $"\nFirst Name: {FirstName} \nLast Name: {LastName} \nAge: {Age} " +
                 $"\nAddress: {Address} \nCity: {City} \nRegion: " +
                 $"{Region} \nFloor: {Floor}\nAbout Person: {AboutPerson}\n\n";
-        }
     }
 }
