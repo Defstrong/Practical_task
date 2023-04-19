@@ -11,7 +11,7 @@ namespace Practice_Problem.Interfaces
         public string City { get; set; }
         public string Region { get; set; }
         public string AboutPerson { get; set; }
-        public PersonDuty Duty { get; set; }
+        public PersonDuty? Duty { get; set; } = null;
         public PersonFloor? Floor { get; set; }
     }
 }

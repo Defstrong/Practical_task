@@ -14,7 +14,18 @@ namespace Practice_Problem.Services
         public Result<List<Person>> SearchPersons(string strRequest, string dataRequest)
         {
             var result = new Result<List<Person>>() { Payload = null };
-            if(string.IsNullOrEmpty(strRequest) || string.IsNullOrEmpty(dataRequest))
+            if(!string.IsNullOrEmpty(strRequest) && !string.IsNullOrEmpty(dataRequest))
+            {
+                result.TextError = "Search persons completed successfuly";
+                result.IsSuccessfully = true;
+                if (strRequest == "First name")
+                    result.Payload = SearchWithFirtName(dataRequest);
+                else if (strRequest == "Last name")
+                    result.Payload = SearchWithLastName(dataRequest);
+                else if(strRequest == "Duty")
+                    result.Payload = SearchWithDuty(dataRequest);
+            }
+            else
             {
                 if(string.IsNullOrEmpty(strRequest))
                 {
@@ -27,17 +38,6 @@ namespace Practice_Problem.Services
                     result.TextError += "Data request is empty\n";
                     result.Error = ErrorStatus.ArgumentNull;
                 }
-            }
-            else
-            {
-                result.TextError = "Search persons completed successfuly";
-                result.IsSuccessfully = true;
-                if (strRequest == "First name")
-                    result.Payload = SearchWithFirtName(dataRequest);
-                else if (strRequest == "Last name")
-                    result.Payload = SearchWithLastName(dataRequest);
-                else if(strRequest == "Duty")
-                    result.Payload = SearchWithDuty(dataRequest);
             }
             return result;
         }

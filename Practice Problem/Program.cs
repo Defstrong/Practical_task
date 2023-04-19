@@ -23,7 +23,7 @@ var _read = new ReadInputData();
 _read.ReadStr = ReadLineStr;
 var _readLine = _read.ReadStr;
 
-string _allCommand = "Add Person\tDelete Person\tEdit Person\tPersons Info\tSearch Persons\tExport Datas";
+string _allCommand = "Add Person\tDelete Person\tEdit Person\tPersons Info\tSearch Persons\tExport Datas\tSort\tFilter";
 
 var _person1 = new Person(new PersonData
 {
@@ -122,8 +122,8 @@ string WriteAllPersonsDatas()
 string AddPerson()
 {
     _read.ReadPersonData(_inputData);
-    _addDeleteAndEditPerson.AddPerson(_inputData);
-    return "Add Person completed successfuly";
+    var result = _addDeleteAndEditPerson.AddPerson(_inputData);
+    return result.TextError;
 }
 
 string DeletePerson()
@@ -131,9 +131,10 @@ string DeletePerson()
     foreach (var ii in _persons)
         _writeMassage.CompletingAction($"First Name: {ii.FirstName}, Last Name: {ii.LastName}, Id: {ii.Id}\n");
 
+    _writeMassage.CompletingAction("Enter person Id: ");
     Guid idPersonForDelete = Guid.Parse(Console.ReadLine());
-    _addDeleteAndEditPerson.DeletePerson(idPersonForDelete);
-    return "Delete Person completed successfuly";
+    var result = _addDeleteAndEditPerson.DeletePerson(idPersonForDelete);
+    return result.TextError;
 }
 
 string WritePersonsInfo()
@@ -146,15 +147,16 @@ string WritePersonsInfo()
 string SearchPerson()
 {
     string inputRequestSearch = String.Empty;
-    string inputRequestPropertyForSearch = String.Empty;
+    string inputRequestPropertyForSearch = string.Empty;
     _writeMassage.CompletingAction($"First name \t Last name \t Duty\n");
     _writeMassage.CompletingAction("Input type search: ");
     inputRequestSearch = _readLine();
     _writeMassage.CompletingAction("Input property for search: ");
     inputRequestPropertyForSearch = _readLine();
     var result = _search.SearchPersons(inputRequestSearch, inputRequestPropertyForSearch);
-    foreach (var ii in result.Payload)
-        Console.WriteLine(ii.ToString());
+    if(result.IsSuccessfully)
+        foreach (var ii in result.Payload)
+            Console.WriteLine(ii.ToString());
     return result.TextError;
 }
 
@@ -167,8 +169,8 @@ string EditPerson()
     inputId = _readLine();
     dataForEdit.Id = Guid.Parse(inputId);
     _read.ReadPersonData(dataForEdit);
-    _addDeleteAndEditPerson.EditPerson(dataForEdit);
-    return "Edit Person completed successfuly";
+    var result = _addDeleteAndEditPerson.EditPerson(dataForEdit);
+    return result.TextError;
 }
 
 string ExportDatas()

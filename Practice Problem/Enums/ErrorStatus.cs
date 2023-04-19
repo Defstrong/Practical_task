@@ -13,6 +13,7 @@ namespace Practice_Problem.Enums
         Failed,
         ArgumentNull,
         NotFound,
-        ServiceNotAvailable
+        ServiceNotAvailable,
+        WrongSintacsis
     }
 }

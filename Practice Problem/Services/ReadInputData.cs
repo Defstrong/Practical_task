@@ -34,12 +34,14 @@ namespace Practice_Problem.Services
             catch
             {
                 error = true;
+                result.Error = ErrorStatus.WrongSintacsis;
+                result.TextError += "Date of birth have a wrong sintacsis";
             }
 
             writeData.CompletingAction("Address : ");
             personInputData.Address = ReadStr();
 
-            writeData.CompletingAction("AboutPerson :ы ");
+            writeData.CompletingAction("AboutPerson : ");
             personInputData.AboutPerson = ReadStr();
 
             writeData.CompletingAction("City : ");
@@ -50,10 +52,30 @@ namespace Practice_Problem.Services
 
             writeData.CompletingAction("Floor : ");
             string FloorPerson = ReadStr();
-            personInputData.Floor = string.
-                IsNullOrEmpty(FloorPerson)
-                ? null : (FloorPerson == "Male"
-                ? PersonFloor.Male : PersonFloor.Female);
+            try
+            {
+                personInputData.Floor = string.
+                    IsNullOrEmpty(FloorPerson)
+                    ? null : (FloorPerson == "Male"
+                    ? PersonFloor.Male : PersonFloor.Female);
+            }
+            catch
+            {
+                error = true;
+                result.Error = ErrorStatus.WrongSintacsis;
+                result.TextError += "Floor person have a wrong sintacsis";
+            }
+
+            if (error)
+                personInputData = null;
+            else
+            {
+                result.IsSuccessfully = true;
+                result.TextError = "Input person data completed successfuly";
+                result.Payload = true;
+            }
+            writeData.ActionWithText -= ConsoleWrite;
+            return result;
         }
         private void ConsoleWrite(object? sender, EventHandlerArgs e) =>
             Console.Write(e.Text);
